@@ -1,0 +1,38 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2",
+    "nodemon": "^2.0.22"
+  },
+  "name": "shopping-app",
+  "proxy": "http://localhost:8080",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {
+    "concurrently": "^8.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
+    "data:import": "node server/seeder.js",
+    "data:destroy": "node server/seeder.js -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sangle2022/Shopping-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sangle2022/Shopping-App/issues"
+  },
+  "homepage": "https://github.com/sangle2022/Shopping-App#readme",
+  "description": ""
+}

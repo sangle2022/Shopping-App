@@ -1,28 +1,38 @@
-const express=require("express");
-const products=require("./data/products")
-const cors = require("cors")
-const dotenv=require("dotenv")
-const app=express();
-app.use(cors())
-require("colors")
+const express = require("express");
+const { errorHandler } = require("./middlewares/errorMiddleware");
+require("colors");
+const products = require("./data/products");
+const dotenv = require("dotenv");
+const connectDb = require("./config/config");
+const productRoutes = require("./routes/productsRoute");
+const usersRoutes = require("./routes/UsersRoute");
+// const orderRoutes = require("./routes/orderRoute");
 
 dotenv.config();
-const connectDb=require("./config/config")
+//connecting to mongodb database
 connectDb();
+const app = express();
+//middleware bodyparser
+app.use(express.json());
 
-app.get("/",(req,res)=>{
-     res.send("welcome to node server")
+//dotenv config
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to Node Server</h1>");
 });
-app.get("/products",(req,res)=>{
-    res.json(products)
-})
 
+app.use("/api", productRoutes);
+app.use("/api/users", usersRoutes);
+// app.use("/api/orders", orderRoutes);
+app.get("/api/config/paypal", (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID);
+});
 
-app.get('/products/:id',(req,res)=>{
-    const product=products.find(p=>p._id===req.params.id);
-    res.json(product)
-})
+app.use(errorHandler);
 
-const PORT=8080
-app.listen(process.env.PORT || PORT,()=>{
-    console.log(`server running on port ${process.env.NODE_ENV} Mode on port ${process.env.PORT}`.inverse)})
+const PORT = 8080;
+app.listen(process.env.PORT || PORT, () => {
+  console.log(
+    `Server Running in ${process.env.NODE_ENV} Mode on Port ${process.env.PORT}`
+      .inverse
+  );
+});

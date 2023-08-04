@@ -15,7 +15,7 @@ import {
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
-} from "../constants/userContants";
+} from "../constants/userConstants";
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");

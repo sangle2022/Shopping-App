@@ -4,43 +4,57 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../component/shared/Message";
 import Loader from "../component/shared/Loader";
-import { login } from "../actions/userAction";
+import { register } from "../actions/userAction";
 import FormContainer from "../component/shared/FromContainer";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-  const redirect = location.search ? location.search.split("=")[1] : "/";
-console.log("**",location,redirect)
-  
 
-  // const qty = new URLSearchParams(location.search).get('qty') || 1;
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
   const dispatch = useDispatch();
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
 
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect);
+        navigate(redirect);
     }
   }, [ userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     //dispatch
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage("Password do not macth");
+    } else {
+      dispatch(register(name, email, password));
+    }
   };
 
   return (
     <>
       <FormContainer>
-        <h1>SIGN IN</h1>
+        <h1>Register</h1>
         {error && <Message varient="danger">{error}</Message>}
         {loading && <Loader />}
-        {Loader}
+        {message && <Message variant="danger">{message}</Message>}
         <Form onSubmit={submitHandler}>
+          <Form.Group controlId="email">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="enter Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
           <Form.Group controlId="email">
             <Form.Label>Email Address</Form.Label>
             <Form.Control
@@ -59,15 +73,24 @@ console.log("**",location,redirect)
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
+          <Form.Group controlId="confirmPassword">
+            <Form.Label>COnfirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Re-enter password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
           <Button type="submit" varient="primary">
             SING IN
           </Button>
         </Form>
         <Row>
           <Col>
-            New Customer ?
-            <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-              Register
+            Have an account !
+            <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+              Login
             </Link>
           </Col>
         </Row>
@@ -76,4 +99,4 @@ console.log("**",location,redirect)
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
